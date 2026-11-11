@@ -1,4 +1,4 @@
-let todos = [
+let todos = JSON.parse(localStorage.getItem('todos')) || [
   { id: 1, text: 'Вивчити HTML', checked: true },
   { id: 2, text: 'Вивчити CSS', checked: true },
   { id: 3, text: 'Вивчити JavaScript', checked: false }
@@ -7,6 +7,10 @@ let todos = [
 const list = document.getElementById('todo-list');
 const itemCountSpan = document.getElementById('item-count');
 const uncheckedCountSpan = document.getElementById('unchecked-count');
+
+function saveTodos() {
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
 
 function newTodo() {
   const taskText = prompt('Введіть назву нового завдання:');
@@ -19,7 +23,7 @@ function newTodo() {
     };
 
     todos.push(newObj);
-    console.log('Оновлений масив todos:', todos);
+    saveTodos();
     render(todos);
   }
 }
@@ -54,6 +58,7 @@ function updateCounter() {
 
 function deleteTodo(id) {
   todos = todos.filter(todo => todo.id !== id);
+  saveTodos();
   render(todos);
 }
 
@@ -61,6 +66,7 @@ function checkTodo(id) {
   const todo = todos.find(item => item.id === id);
   if (todo) {
     todo.checked = !todo.checked;
+    saveTodos();
     render(todos);
   }
 }
